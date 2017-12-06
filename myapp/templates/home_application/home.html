@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>计算器-测试蓝鲸发布部署</title>
+</head>
+
+
+<style>
+    *{
+        margin: 0;
+        padding: 0;
+    }
+    .header {
+        width: 100%;
+        height:100px;
+        background:#444444;
+        color:orange;
+        text-align: center;
+        font-size: 30px;
+        line-height: 100px;
+    }
+    .header span{
+        font-size: 22px;
+        color:blue;
+    }
+    .left ,.right{
+        width: 48%;
+        height: 300px;
+        float: left;
+        margin: 0.8%;
+        border: 1px solid red;
+    }
+    .left_l, .left_r,.right_l,.right_r{
+        width:48%;
+        margin: 0.5%;
+        float: left;
+        background-color: #dddddd;
+        height:98%;
+        text-align: center;
+
+    }
+    h3{
+        height: 50px;
+        background-color: #ddd;
+        text-align: center;
+        color: #000;
+        line-height: 50px;
+        margin: 10px;
+    }
+   input{
+        margin-top: 20px;
+    }
+    table{
+        width: 100%;
+        overflow: scroll;
+    }
+    table tr{
+        height:15px;
+        width: 100%;
+    }
+    table tr th , table tr td{
+        width: 20%;
+        height:15px;
+    }
+</style>
+<body>
+<div class="header">
+     计算器<span>——蓝鲸系统测试</span>
+</div>
+<div class="left">
+    <div class="left_l">
+        <h3>输入界面</h3>
+        <lable>
+            输入参数 &nbsp;&nbsp;：
+            <input type="text" id="input1">
+        </lable>
+        <br>
+         <lable>
+            输入第二参数
+            <input type="text" id="input2">
+        </lable>
+        <br>
+
+            <input type="button" value="确定" id="sure"> </input>
+        <div>
+
+        </div>
+    </div>
+    <div class="left_r">
+        <h3>显示界面</h3>
+        <div>
+            <span id="view"></span>
+            <br>
+        </div>
+    </div>
+</div>
+<div class="right">
+    <div class="right_l">
+        <h3>结果显示界面</h3>
+        <div>
+            <span id="result"></span>
+        </div>
+    </div>
+    <div class="right_r">
+        <h3>历史显示界面</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>乘数</th>
+                    <th>被乘数</th>
+                    <th>结果</th>
+                </tr>
+            </thead>
+            <tbody>
+               % for item in req_sql:
+               <tr>
+                     <td> ${item.id} </td>
+                    <td>${item.input1}</td>
+                    <td>${item.input2}</td>
+                    <td>${item.result}</td>
+               </tr>
+                % endfor
+
+            </tbody>
+        </table>
+    <ul id="history">
+    </ul>
+    </div>
+</div>
+</body>
+</html>
+<script src="${STATIC_URL}js/jquery-1.10.2.min.js"></script>
+<script src="${STATIC_URL}js/csrftoken.js"></script>
+<script>
+       var result= $("#result");
+       var history=$("#history");
+       var sure=$("#sure");
+       var count=$("#count");
+       sure.click(function(){
+            var input1=$("#input1").val();
+            var input2=$("#input2").val();
+            var view=$("#view");
+            view.text(input1 + "*" + input2 + "=");
+            url ="computer"
+            $.get(url,{
+                'input1':input1,
+                'input2':input2
+            },function(data){
+                 result.text(data.message)
+            },'json')
+       })
+
+</script>
